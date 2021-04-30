@@ -12,7 +12,7 @@ class MainPage extends React.Component{
   render(){
     return (
       <ImageBackground style={styles.imageBackgroundStyle}  source={require('../assets/backgroundMain.png')}>
-        <View style={styles.buttonsContainer}>
+        <View style={styles.CenterContainer}>
             <TouchableOpacity style={styles.buttonStyle} onPress={this.navigatetoSignIn.bind(this)}>
                 <Text style={styles.textStyle}>Online room</Text>
             </TouchableOpacity>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         flex:1,
     }
     ,
-    buttonsContainer:{
+    CenterContainer:{
         alignItems:'center',
         alignSelf:'center',
         flex:1,
@@ -53,8 +53,9 @@ const styles = StyleSheet.create({
     }
     ,
     textStyle:{
-        color:'red',
-        fontSize:20
+        color:'black',
+        fontSize:20,
+        fontWeight:'bold'
     }
     ,
    

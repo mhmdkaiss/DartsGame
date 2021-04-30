@@ -11,7 +11,7 @@ class onlineRoomMainPage extends React.Component{
     return (
       <ImageBackground style={styles.imageBackgroundStyle} >
         <View style={styles.buttonsContainer}>
-          <Text>online room</Text>
+          <Text style={styles.textStyle}>online room</Text>
         </View>
       </ImageBackground>
     )
@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
     }
     ,
     textStyle:{
-        color:'red',
-        fontSize:20
+        color:'black',
+        fontSize:22
     }
     ,
    

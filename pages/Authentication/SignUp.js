@@ -3,13 +3,9 @@ import {View,StyleSheet,ImageBackground,Dimensions, TouchableOpacity,Text} from 
 import Input from '../Components/Input';
 
 
-class SignIn extends React.Component{
+class SignUp extends React.Component{
 
-  state = {userName:'',password:''}
-
-  navigatetoSignUp=()=>{
-    this.props.navigation.navigate('SignUp');
-  }
+  state = {userName:'',password:'',email:''}
 
   navigatetoForgotPassword=()=>{
     this.props.navigation.navigate('ForgotPassword');
@@ -26,7 +22,16 @@ class SignIn extends React.Component{
               onChangeText={text=>this.setState({userName:text})}
             />
 
-            <View style={{height:( Dimensions.get('window').height*5)/100}}/>
+            <View style={{height:( Dimensions.get('window').height*3)/100}}/>
+
+            <Input 
+              iconName={'email'}
+              placeholder={'Email'}
+              value={this.state.email}
+              onChangeText={text=>this.setState({email:text})}
+            />
+
+            <View style={{height:( Dimensions.get('window').height*3)/100}}/>
 
             <Input 
               iconName={'lock'}
@@ -35,21 +40,10 @@ class SignIn extends React.Component{
               onChangeText={text=>this.setState({password:text})}
             />
 
-            <View style={{height:( Dimensions.get('window').height*3)/100}}/>
-
-            <View style={styles.textContainer}>
-              <TouchableOpacity style={{flex:1}} onPress={()=>this.navigatetoSignUp()}>
-               <Text style={styles.SignUpTextStyle}>Sign Up</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={()=>this.navigatetoForgotPassword()}>
-               <Text style={styles.FrogetPassTextStyle}>Forgot Password?</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={{height:( Dimensions.get('window').height*2)/100}}/>
+            <View style={{height:( Dimensions.get('window').height*5)/100}}/>
 
             <TouchableOpacity style={styles.SignInButton}>
-              <Text style={styles.textStyle}>Sign In</Text>
+              <Text style={styles.textStyle}>Sign Up</Text>
             </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -99,10 +93,9 @@ const styles = StyleSheet.create({
     ,
     textStyle:{
         color:'black',
-        fontSize:19,
+        fontSize:18,
         fontWeight:'bold',
-        
     }
 });
 
-export default SignIn;
+export default SignUp;
