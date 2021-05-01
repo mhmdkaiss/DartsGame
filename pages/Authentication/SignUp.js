@@ -5,10 +5,40 @@ import Input from '../Components/Input';
 
 class SignUp extends React.Component{
 
-  state = {userName:'',password:'',email:''}
+  state = {userName:'mhmd',password:'12345678',email:'mohamad_kaiss@hotmail.com',error:'',accessToken:''}
 
-  navigatetoForgotPassword=()=>{
-    this.props.navigation.navigate('ForgotPassword');
+  // navigatetoForgotPassword=()=>{
+  //   this.props.navigation.navigate('ForgotPassword');
+  // }
+
+  signUpUser(){
+    try{
+      fetch('http://34.253.54.11:7000/api/v1/Users/Register', {
+          method: 'POST',
+          
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          
+          body: 
+               JSON.stringify( {
+              "userName": `${this.state.userName}`,
+              "roleName": "Free",
+              "email": `${this.state.email}`,
+              "password": `${this.state.password}`,
+              "enabled": true
+                })                
+        }).then((response) => response.json())
+        .then((json) => {
+          console.log(json)
+          this.setState({error:json.result.message});
+          if(json.result.accessToken){
+            this.setState({accessToken:json.result.accessToken})
+          }
+        });
+       }
+       catch(e){console.log(e)}
   }
 
   render(){
@@ -40,9 +70,11 @@ class SignUp extends React.Component{
               onChangeText={text=>this.setState({password:text})}
             />
 
-            <View style={{height:( Dimensions.get('window').height*5)/100}}/>
+            <View style={{height:( Dimensions.get('window').height*3)/100}}/>
 
-            <TouchableOpacity style={styles.SignInButton}>
+            {this.state.error?<Text style={styles.errorStyle}>{this.state.error}</Text>:null}
+
+            <TouchableOpacity style={styles.SignInButton} onPress={()=>this.signUpUser()}>
               <Text style={styles.textStyle}>Sign Up</Text>
             </TouchableOpacity>
         </View>
@@ -81,6 +113,13 @@ const styles = StyleSheet.create({
     FrogetPassTextStyle:{
       color:'white',
       fontSize:16
+    }
+    ,
+    errorStyle:{
+      color:'red',
+      fontSize:18,
+      fontWeight:'bold',
+      marginBottom:( Dimensions.get('window').height*3)/100,
     }
     ,
     SignInButton:{
