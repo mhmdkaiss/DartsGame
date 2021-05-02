@@ -2,14 +2,13 @@ import React from 'react';
 import {View,StyleSheet,ImageBackground,Dimensions, TouchableOpacity,Text} from 'react-native';
 import Input from '../Components/Input';
 
+import {connect} from 'react-redux'
+
+import AsyncStorage from '@react-native-community/async-storage'
 
 class SignUp extends React.Component{
 
   state = {userName:'mhmd',password:'12345678',email:'mohamad_kaiss@hotmail.com',error:'',accessToken:''}
-
-  // navigatetoForgotPassword=()=>{
-  //   this.props.navigation.navigate('ForgotPassword');
-  // }
 
   signUpUser(){
     try{
@@ -30,11 +29,12 @@ class SignUp extends React.Component{
               "enabled": true
                 })                
         }).then((response) => response.json())
-        .then((json) => {
-          console.log(json)
+        .then(async(json) => {
           this.setState({error:json.result.message});
           if(json.result.accessToken){
-            this.setState({accessToken:json.result.accessToken})
+            this.props.setAccessToken(json.result.accessToken);
+            await AsyncStorage.setItem('accessToken', json.result.accessToken)
+            this.props.navigation.navigate('onlineRoomMainPage');
           }
         });
        }
@@ -73,6 +73,9 @@ class SignUp extends React.Component{
             <View style={{height:( Dimensions.get('window').height*3)/100}}/>
 
             {this.state.error?<Text style={styles.errorStyle}>{this.state.error}</Text>:null}
+            
+        {/* <Text>{this.props.accessToken}</Text> */}
+
 
             <TouchableOpacity style={styles.SignInButton} onPress={()=>this.signUpUser()}>
               <Text style={styles.textStyle}>Sign Up</Text>
@@ -83,6 +86,22 @@ class SignUp extends React.Component{
   }
  
 };
+
+
+function mapDispatchToProps(dispatch){
+  return {
+    setAccessToken:(token)=> dispatch({type:'setAccessToken',payload:token}),
+    removeAccessToken:()=> dispatch({type:'removeAccessToken',payload:''}),
+  }
+}
+
+function mapStateToProps (state) {
+  return {
+    accessToken : state.accessToken
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(SignUp);
 
 const styles = StyleSheet.create({
     imageBackgroundStyle:{
@@ -137,4 +156,3 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SignUp;

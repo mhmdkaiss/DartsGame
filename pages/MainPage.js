@@ -1,12 +1,14 @@
 import React , {Component} from 'react';
 import {View,StyleSheet,ImageBackground,Dimensions, TouchableOpacity,Text} from 'react-native';
 
-
+import AsyncStorage from '@react-native-community/async-storage'
 
 class MainPage extends React.Component{
 
-    navigatetoSignIn(){
-        this.props.navigation.navigate('SignIn');
+    async navigatetoSignIn(){
+        const accessToken = await AsyncStorage.getItem('accessToken')
+        if(accessToken==null){ this.props.navigation.navigate('SignIn');}
+        else{this.props.navigation.navigate('onlineRoomMainPage');}
     }
 
   render(){

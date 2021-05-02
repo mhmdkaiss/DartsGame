@@ -2,10 +2,15 @@ import React from 'react';
 import {View,StyleSheet,ImageBackground,Dimensions, TouchableOpacity,Text} from 'react-native';
 import Input from '../Components/Input';
 
+import AsyncStorage from '@react-native-community/async-storage'
 
 class ForgotPassword extends React.Component{
 
     state={email:''}
+
+    async forgotPassword(){
+      console.log('forget')
+    }
 
   render(){
     return (
@@ -21,7 +26,7 @@ class ForgotPassword extends React.Component{
 
             <View style={{height:( Dimensions.get('window').height*3)/100}}/>
 
-            <TouchableOpacity style={styles.SignInButton}>
+            <TouchableOpacity style={styles.SignInButton} onPress={()=>this.forgotPassword()}>
               <Text style={styles.textStyle}>Send Email</Text>
             </TouchableOpacity>
         </View>

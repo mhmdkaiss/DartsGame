@@ -1,23 +1,50 @@
 import React , {Component} from 'react';
-import {View,StyleSheet,ImageBackground,Dimensions, TouchableOpacity,Text} from 'react-native';
+import {View,StyleSheet,ImageBackground,Dimensions, TouchableOpacity,Text, Button} from 'react-native';
 
+import AsyncStorage from '@react-native-community/async-storage'
 
+import {connect} from 'react-redux'
 
 class onlineRoomMainPage extends React.Component{
 
-  
+  gotoHome(){
+    this.props.navigation.navigate('MainPage')
+  }
+
+  async logout(){
+    await AsyncStorage.removeItem('accessToken')
+    this.props.navigation.navigate('MainPage')
+    this.props.removeAccessToken();
+  }
 
   render(){
     return (
       <ImageBackground style={styles.imageBackgroundStyle} >
         <View style={styles.buttonsContainer}>
+          <Text>{this.props.accessToken}</Text>
           <Text style={styles.textStyle}>online room</Text>
+          <Button title={'logout'} onPress={()=>this.logout()}/>
+          <Button title={'go back'} onPress={()=>this.gotoHome()}/>
         </View>
       </ImageBackground>
     )
   }
  
 };
+
+function mapStateToProps (state) {
+  return {
+    accessToken : state.accessToken
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return{
+    removeAccessToken :() => dispatch({type:'removeAccessToken',payload:' '})
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(onlineRoomMainPage);
 
 const styles = StyleSheet.create({
     imageBackgroundStyle:{
@@ -49,5 +76,3 @@ const styles = StyleSheet.create({
     ,
    
 });
-
-export default onlineRoomMainPage;

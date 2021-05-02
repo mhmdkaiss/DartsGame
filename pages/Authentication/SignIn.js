@@ -2,10 +2,13 @@ import React from 'react';
 import {View,StyleSheet,ImageBackground,Dimensions, TouchableOpacity,Text} from 'react-native';
 import Input from '../Components/Input';
 
+import {connect} from 'react-redux'
+
+import AsyncStorage from '@react-native-community/async-storage'
 
 class SignIn extends React.Component{
 
-  state = {userName:'',password:''}
+  state = {userName:'',password:'',error:''}
 
   navigatetoSignUp=()=>{
     this.props.navigation.navigate('SignUp');
@@ -15,7 +18,36 @@ class SignIn extends React.Component{
     this.props.navigation.navigate('ForgotPassword');
   }
 
+  signInUser(){
+      try{
+        fetch('http://34.253.54.11:7000/api/v1/Auth/Token', {
+            method: 'POST',
+            
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            
+            body: 
+                 JSON.stringify( {
+                  "userName": `${this.state.userName}`,
+                  "password": `${this.state.password}`
+                })                
+          }).then((response) => response.json())
+          .then(async(json) => {
+            this.setState({error:json.result.message});
+            if(json.result.accessToken){
+             this.props.setAccessToken(json.result.accessToken);
+             await AsyncStorage.setItem('accessToken', json.result.accessToken)
+             this.props.navigation.navigate('onlineRoomMainPage');
+            }
+          });
+         }
+         catch(e){console.log(e)}
+  }
+
   render(){
+   
     return (
       <ImageBackground style={styles.imageBackgroundStyle}  source={require('../../assets/backgroundMain.png')}>
         <View style={styles.CenterContainer}>
@@ -33,6 +65,7 @@ class SignIn extends React.Component{
               placeholder={'Password'}
               value={this.state.password}
               onChangeText={text=>this.setState({password:text})}
+              textS
             />
 
             <View style={{height:( Dimensions.get('window').height*3)/100}}/>
@@ -48,7 +81,9 @@ class SignIn extends React.Component{
 
             <View style={{height:( Dimensions.get('window').height*2)/100}}/>
 
-            <TouchableOpacity style={styles.SignInButton}>
+           <Text>{this.state.error}</Text>
+
+            <TouchableOpacity style={styles.SignInButton} onPress={()=>this.signInUser()}>
               <Text style={styles.textStyle}>Sign In</Text>
             </TouchableOpacity>
         </View>
@@ -57,6 +92,21 @@ class SignIn extends React.Component{
   }
  
 };
+
+function mapDispatchToProps(dispatch){
+  return {
+    setAccessToken:(token)=> dispatch({type:'setAccessToken',payload:token}),
+    removeAccessToken:()=> dispatch({type:'removeAccessToken',payload:''}),
+  }
+}
+
+function mapStateToProps (state) {
+  return {
+    accessToken : state.accessToken
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(SignIn);
 
 const styles = StyleSheet.create({
     imageBackgroundStyle:{
@@ -105,4 +155,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SignIn;
+
