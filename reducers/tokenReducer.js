@@ -1,5 +1,6 @@
 const initialState = {
-    accessToken : ''
+    accessToken : '',
+    time:0,
 }
 
 export default tokenReducer = (state=initialState,action) => {
@@ -8,6 +9,10 @@ export default tokenReducer = (state=initialState,action) => {
             return {accessToken:action.payload}
         case 'removeAccessToken':
             return {accessToken:action.payload}
+        case 'runTimer':
+            return {time:state.time+action.payload}
+        case 'rerunTimer':
+            return {time:action.payload}
     }
     return state
 }

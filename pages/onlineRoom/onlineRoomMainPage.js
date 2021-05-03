@@ -5,7 +5,21 @@ import AsyncStorage from '@react-native-community/async-storage'
 
 import {connect} from 'react-redux'
 
+import BackgroundTimer from 'react-native-background-timer';
+
 class onlineRoomMainPage extends React.Component{
+
+  componentDidMount(){
+    // BackgroundTimer.runBackgroundTimer(() => {
+    //   this.props.runTimer(1);
+    //   console.log(this.props.time)
+    //   if(this.props.time>=5){
+    //     this.props.rerunTimer(0)
+    //     console.log('run post method')
+    //   }
+    //   }, 
+    //   1000)
+  }
 
   gotoHome(){
     this.props.navigation.navigate('MainPage')
@@ -15,6 +29,8 @@ class onlineRoomMainPage extends React.Component{
     await AsyncStorage.removeItem('accessToken')
     this.props.navigation.navigate('MainPage')
     this.props.removeAccessToken();
+
+    BackgroundTimer.stopBackgroundTimer();
   }
 
   render(){
@@ -34,13 +50,16 @@ class onlineRoomMainPage extends React.Component{
 
 function mapStateToProps (state) {
   return {
-    accessToken : state.accessToken
+    accessToken : state.accessToken,
+    time: state.time,
   }
 }
 
 function mapDispatchToProps(dispatch){
   return{
-    removeAccessToken :() => dispatch({type:'removeAccessToken',payload:' '})
+    removeAccessToken :() => dispatch({type:'removeAccessToken',payload:' '}),
+    runTimer : (time) => dispatch({type:'runTimer', payload:time}),
+    rerunTimer : (time) => dispatch({type:'rerunTimer', payload:time}),
   }
 }
 

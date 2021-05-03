@@ -3,7 +3,10 @@ import {View,StyleSheet,ImageBackground,Dimensions, TouchableOpacity,Text} from 
 
 import AsyncStorage from '@react-native-community/async-storage'
 
+import BackgroundTimer from 'react-native-background-timer';
+
 class MainPage extends React.Component{
+
 
     async navigatetoSignIn(){
         const accessToken = await AsyncStorage.getItem('accessToken')
@@ -18,10 +21,10 @@ class MainPage extends React.Component{
             <TouchableOpacity style={styles.buttonStyle} onPress={this.navigatetoSignIn.bind(this)}>
                 <Text style={styles.textStyle}>Online room</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonStyle}>
+            <TouchableOpacity style={styles.buttonStyle} >
                 <Text style={styles.textStyle}>Online room</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonStyle}>
+            <TouchableOpacity style={styles.buttonStyle} >
                 <Text style={styles.textStyle}>Online room</Text>
             </TouchableOpacity>
         </View>

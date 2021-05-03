@@ -13,6 +13,7 @@ import {Provider} from 'react-redux'
 import tokenReducer from './reducers/tokenReducer'
 
 import AsyncStorage from '@react-native-community/async-storage'
+import BackgroundTimer from 'react-native-background-timer';
 
 const store = createStore(tokenReducer);
 
@@ -43,7 +44,6 @@ function UserNotSignedIn() {
 }
 
 
-
 class App extends React.Component{
 
   state={accessToken:' '}
@@ -51,6 +51,21 @@ class App extends React.Component{
   async componentDidMount(){
     const accessToken = await AsyncStorage.getItem('accessToken')
     this.setState({accessToken:accessToken})
+
+    if(accessToken!=null){
+      console.log('run post method')
+      //refresh token + rerun timer
+      BackgroundTimer.runBackgroundTimer(() => {
+        store.dispatch({type:'runTimer',payload:1});
+       console.log(store.getState().time)
+       if(store.getState().time>=5){
+        store.dispatch({type:'rerunTimer',payload:0});
+        console.log('run post method')
+       }
+        }, 
+        1000);
+    }
+    
   }
 
   render(){

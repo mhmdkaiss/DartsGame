@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useEffect} from 'react';
 import {View,StyleSheet,ImageBackground,Dimensions, TouchableOpacity,Text} from 'react-native';
 import Input from '../Components/Input';
 
@@ -6,9 +6,15 @@ import {connect} from 'react-redux'
 
 import AsyncStorage from '@react-native-community/async-storage'
 
+import BackgroundTimer from 'react-native-background-timer';
+
 class SignIn extends React.Component{
 
-  state = {userName:'',password:'',error:''}
+  state = {userName:'mhmdkaisss',password:'12345678',error:''}
+
+  componentDidMount(){
+   
+  }
 
   navigatetoSignUp=()=>{
     this.props.navigation.navigate('SignUp');
@@ -41,7 +47,7 @@ class SignIn extends React.Component{
              await AsyncStorage.setItem('accessToken', json.result.accessToken)
              this.props.navigation.navigate('onlineRoomMainPage');
             }
-          });
+          })
          }
          catch(e){console.log(e)}
   }
@@ -97,12 +103,15 @@ function mapDispatchToProps(dispatch){
   return {
     setAccessToken:(token)=> dispatch({type:'setAccessToken',payload:token}),
     removeAccessToken:()=> dispatch({type:'removeAccessToken',payload:''}),
+    runTimer : (time) => dispatch({type:'runTimer', payload:time}),
+    rerunTimer : (time) => dispatch({type:'rerunTimer', payload:time})
   }
 }
 
 function mapStateToProps (state) {
   return {
-    accessToken : state.accessToken
+    accessToken : state.accessToken,
+    time: state.time,
   }
 }
 
